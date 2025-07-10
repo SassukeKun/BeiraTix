@@ -1,5 +1,6 @@
-// components/PaymentProcess.tsx
+// components/PaymentProcess.jsx
 import { useState } from "react";
+import React from "react";
 import { 
   CreditCard, 
   Smartphone, 
@@ -13,15 +14,6 @@ import {
 // Components UI
 import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import React from "react";
-
-// Tipos
-interface PaymentProcessProps {
-  selectedTickets: any[]; // Tipo simplificado para os ingressos selecionados
-  onBack: () => void; // Função para voltar à tela anterior
-  onComplete: (paymentData: any) => void; // Função para finalizar o pagamento
-  eventDetails: any; // Detalhes do evento
-}
 
 // Componente principal
 const PaymentProcess = ({ 
@@ -29,16 +21,16 @@ const PaymentProcess = ({
   onBack, 
   onComplete,
   eventDetails 
-}: PaymentProcessProps) => {
+}) => {
   // Estados
-  const [step, setStep] = useState<number>(1);
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [step, setStep] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [contactInfo, setContactInfo] = useState({
     name: "",
     email: "",
     phone: ""
   });
-  const [mpesaNumber, setMpesaNumber] = useState<string>("");
+  const [mpesaNumber, setMpesaNumber] = useState("");
   const [cardDetails, setCardDetails] = useState({
     number: "",
     name: "",
@@ -49,8 +41,8 @@ const PaymentProcess = ({
     bank: "BIM",
     reference: Math.random().toString(36).substr(2, 9).toUpperCase()
   });
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState("");
 
   // Calcular total
   const calculateTotal = () => {
@@ -77,6 +69,9 @@ const PaymentProcess = ({
         setError("Por favor, preencha todos os dados do cartão corretamente.");
         return;
       }
+    } else if (step === 3 && !validateContactInfo()) {
+      setError("Por favor, preencha todos os campos de contato corretamente.");
+      return;
     }
     
     setStep(step + 1);
@@ -115,7 +110,7 @@ const PaymentProcess = ({
   };
 
   // Validações
-  const validateMpesaNumber = (number: string) => {
+  const validateMpesaNumber = (number) => {
     return number.length >= 9 && /^\d+$/.test(number);
   };
 
@@ -184,7 +179,7 @@ const PaymentProcess = ({
           </div>
           
           {/* Cartão de Crédito */}
-          <div 
+          {/* <div 
             className={`flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
               paymentMethod === "card" 
                 ? "border-gray-800 bg-gray-50" 
@@ -200,10 +195,10 @@ const PaymentProcess = ({
               <p className="text-sm text-gray-500">Visa, Mastercard, etc.</p>
             </div>
             <ChevronRight size={18} className="text-gray-400" />
-          </div>
+          </div> */}
           
           {/* Transferência Bancária */}
-          <div 
+          {/* <div 
             className={`flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
               paymentMethod === "bank" 
                 ? "border-gray-800 bg-gray-50" 
@@ -219,7 +214,7 @@ const PaymentProcess = ({
               <p className="text-sm text-gray-500">BIM, BCI, Standard Bank</p>
             </div>
             <ChevronRight size={18} className="text-gray-400" />
-          </div>
+          </div> */}
         </div>
       </div>
     );

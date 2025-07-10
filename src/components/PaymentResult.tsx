@@ -1,5 +1,6 @@
-// components/PaymentResult.tsx
+// components/PaymentResult.jsx
 import { useState } from "react";
+import React from "react";
 import { 
   CheckCircle, 
   AlertTriangle, 
@@ -12,26 +13,6 @@ import {
 // Components UI
 import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import React from "react";
-
-// Tipos
-interface PaymentResultProps {
-  status: "success" | "pending" | "failed";
-  paymentData: {
-    method: string;
-    contactInfo: {
-      name: string;
-      email: string;
-      phone: string;
-    };
-    total: number;
-    transactionId: string;
-    timestamp: string;
-  };
-  onGoHome: () => void;
-  onRetry: () => void;
-  onViewTickets?: () => void;
-}
 
 // Componente principal
 const PaymentResult = ({ 
@@ -40,7 +21,7 @@ const PaymentResult = ({
   onGoHome, 
   onRetry,
   onViewTickets 
-}: PaymentResultProps) => {
+}) => {
   // Renderizar conteúdo com base no status
   const renderContent = () => {
     switch (status) {

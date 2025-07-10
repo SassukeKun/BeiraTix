@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  Users, 
-  Share2, 
-  Heart, 
-  Ticket, 
-  Star, 
-  ChevronDown, 
-  Plus, 
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
+  Share2,
+  Heart,
+  Ticket,
+  Star,
+  ChevronDown,
+  Plus,
   Minus,
   ArrowLeft
 } from "lucide-react";
@@ -21,6 +21,12 @@ import EventImageGallery from "../components/EventImageGallery";
 import EventTicketSelector from "../components/EventTicketSelector";
 import EventLocationMap from "../components/EventLocationMap";
 import RelatedEvents from "../components/RelatedEvents";
+
+
+
+
+
+
 
 // Dados de exemplo
 const eventDetailsMock = {
@@ -106,15 +112,14 @@ const eventDetailsMock = {
 };
 
 // Componente principal da página de detalhes do evento
-const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
+const EventDetails = ({ eventId, goToHome, goToEventDetails, goToCheckout }) => {
   const [selectedTickets, setSelectedTickets] = useState({});
   const [expandedFAQs, setExpandedFAQs] = useState({});
   const [showAllDescription, setShowAllDescription] = useState(false);
-  
   // Em uma aplicação real, buscaríamos os detalhes do evento pelo ID
   // Aqui, usamos os dados mockados diretamente
   const eventDetails = eventDetailsMock;
-  
+
   // Função para alternar a expansão de uma pergunta do FAQ
   const toggleFAQ = (index) => {
     setExpandedFAQs((prev) => ({
@@ -122,13 +127,13 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
       [index]: !prev[index]
     }));
   };
-  
+
   // Função para atualizar a quantidade de ingressos selecionados
   const updateTicketCount = (ticketId, action) => {
     setSelectedTickets((prev) => {
       const currentCount = prev[ticketId] || 0;
       const ticket = eventDetails.ticketTypes.find(t => t.id === ticketId);
-      
+
       if (action === 'increase') {
         if (currentCount < ticket.maxPerPurchase && currentCount < ticket.available) {
           return { ...prev, [ticketId]: currentCount + 1 };
@@ -138,11 +143,11 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
           return { ...prev, [ticketId]: currentCount - 1 };
         }
       }
-      
+
       return prev;
     });
   };
-  
+
   // Calcular total da compra
   const calculateTotal = () => {
     return Object.entries(selectedTickets).reduce((total, [ticketId, quantity]) => {
@@ -150,7 +155,7 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
       return total + (ticket.price * quantity);
     }, 0);
   };
-  
+
   // Verificar se algum ingresso foi selecionado
   const hasSelectedTickets = Object.values(selectedTickets).some(quantity => quantity > 0);
 
@@ -158,13 +163,13 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
       <Header />
-      
+
       {/* Breadcrumb e ações */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center text-sm text-gray-500">
-              <button 
+              <button
                 onClick={goToHome}
                 className="flex items-center hover:text-gray-700"
               >
@@ -187,7 +192,7 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
           </div>
         </div>
       </div>
-      
+
       {/* Conteúdo principal */}
       <main className="flex-grow pt-6 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -225,34 +230,34 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
                   <span className="text-sm text-gray-500">{eventDetails.reviewCount} avaliações</span>
                 </div>
               </div>
-              
+
               {/* Galeria de imagens */}
               <EventImageGallery images={eventDetails.images} />
-              
+
               {/* Descrição do evento */}
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Sobre este evento</h2>
                 <div className="prose prose-gray max-w-none">
                   <p className="text-gray-600 mb-4">{eventDetails.description}</p>
-                  
+
                   {showAllDescription && (
                     <div className="mt-4 text-gray-600 whitespace-pre-line">
                       {eventDetails.longDescription}
                     </div>
                   )}
-                  
-                  <button 
+
+                  <button
                     onClick={() => setShowAllDescription(!showAllDescription)}
                     className="text-gray-800 font-medium flex items-center hover:text-gray-600 mt-2"
                   >
                     {showAllDescription ? 'Mostrar menos' : 'Ler mais'}
-                    <ChevronDown 
-                      size={16} 
-                      className={`ml-1 transition-transform ${showAllDescription ? 'rotate-180' : ''}`} 
+                    <ChevronDown
+                      size={16}
+                      className={`ml-1 transition-transform ${showAllDescription ? 'rotate-180' : ''}`}
                     />
                   </button>
                 </div>
-                
+
                 {/* Destaques do evento */}
                 <div className="mt-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Destaques</h3>
@@ -268,23 +273,23 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
                   </ul>
                 </div>
               </div>
-              
+
               {/* Localização */}
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Localização</h2>
                 <p className="text-gray-600 mb-4">{eventDetails.venue}</p>
                 <p className="text-gray-600 mb-6">{eventDetails.address}</p>
-                
+
                 {/* Mapa */}
                 <div className="h-72 bg-gray-100 rounded-lg overflow-hidden">
-                  <EventLocationMap 
-                    lat={eventDetails.mapCoordinates.lat} 
-                    lng={eventDetails.mapCoordinates.lng} 
+                  <EventLocationMap
+                    lat={eventDetails.mapCoordinates.lat}
+                    lng={eventDetails.mapCoordinates.lng}
                     venueName={eventDetails.venue}
                   />
                 </div>
               </div>
-              
+
               {/* FAQ */}
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Perguntas Frequentes</h2>
@@ -296,9 +301,9 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
                         className="flex justify-between items-center w-full text-left"
                       >
                         <span className="font-medium text-gray-900">{item.question}</span>
-                        <ChevronDown 
-                          size={20} 
-                          className={`text-gray-500 transition-transform ${expandedFAQs[index] ? 'rotate-180' : ''}`} 
+                        <ChevronDown
+                          size={20}
+                          className={`text-gray-500 transition-transform ${expandedFAQs[index] ? 'rotate-180' : ''}`}
                         />
                       </button>
                       {expandedFAQs[index] && (
@@ -311,16 +316,16 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
                 </div>
               </div>
             </div>
-            
+
             {/* Coluna de compra de ingressos */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-xl shadow-sm p-6 sticky top-24">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Ingressos</h2>
-                
+
                 {/* Tipos de ingressos */}
                 <div className="space-y-4 mb-6">
                   {eventDetails.ticketTypes.map((ticket) => (
-                    <EventTicketSelector 
+                    <EventTicketSelector
                       key={ticket.id}
                       ticket={ticket}
                       quantity={selectedTickets[ticket.id] || 0}
@@ -329,14 +334,14 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
                     />
                   ))}
                 </div>
-                
+
                 {/* Resumo da compra */}
                 {hasSelectedTickets && (
                   <div className="border-t border-gray-200 pt-4 mt-6">
                     <div className="space-y-2 mb-4">
                       {Object.entries(selectedTickets).map(([ticketId, quantity]) => {
                         if (quantity <= 0) return null;
-                        
+
                         const ticket = eventDetails.ticketTypes.find(t => t.id === parseInt(ticketId));
                         return (
                           <div key={ticketId} className="flex justify-between text-sm">
@@ -346,26 +351,43 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
                         );
                       })}
                     </div>
-                    
+
                     <div className="flex justify-between text-lg font-semibold mt-4 pt-4 border-t border-gray-200">
                       <span>Total</span>
                       <span>{calculateTotal().toLocaleString()} MZN</span>
                     </div>
                   </div>
                 )}
-                
+
                 {/* Botão de compra */}
                 <button
                   disabled={!hasSelectedTickets}
-                  className={`w-full py-3 px-4 rounded-lg font-medium mt-6 ${
-                    hasSelectedTickets 
-                      ? 'bg-gray-800 hover:bg-gray-900 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all' 
+                  onClick={() => {
+                    // Preparar os ingressos selecionados para o checkout
+                    const ticketsForCheckout = Object.entries(selectedTickets)
+                      .filter(([_, quantity]) => quantity > 0)
+                      .map(([ticketId, quantity]) => {
+                        const ticket = eventDetails.ticketTypes.find(t => t.id === parseInt(ticketId));
+                        return {
+                          id: parseInt(ticketId),
+                          name: ticket.name,
+                          price: ticket.price,
+                          currency: ticket.currency || 'MZN',
+                          quantity: quantity
+                        };
+                      });
+
+                    // Navegar para a página de checkout
+                    goToCheckout(eventDetails.id, ticketsForCheckout);
+                  }}
+                  className={`w-full py-3 px-4 rounded-lg font-medium mt-6 ${hasSelectedTickets
+                      ? 'bg-gray-800 hover:bg-gray-900 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all'
                       : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  }`}
+                    }`}
                 >
                   {hasSelectedTickets ? 'Comprar Ingressos' : 'Selecione um Ingresso'}
                 </button>
-                
+
                 {/* Políticas */}
                 <div className="mt-6 text-xs text-gray-500">
                   <p>Ao comprar, você concorda com os Termos de Serviço e Política de Privacidade do BeiraTix.</p>
@@ -374,18 +396,18 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails }) => {
               </div>
             </div>
           </div>
-          
+
           {/* Eventos relacionados */}
           <div className="mt-12">
-            <RelatedEvents 
-              category={eventDetails.category} 
-              currentEventId={eventDetails.id} 
+            <RelatedEvents
+              category={eventDetails.category}
+              currentEventId={eventDetails.id}
               goToEventDetails={goToEventDetails}
             />
           </div>
         </div>
       </main>
-      
+
       {/* Footer */}
       <Footer />
     </div>
