@@ -1,13 +1,12 @@
 // components/PaymentResult.jsx
-import { useState } from "react";
 import React from "react";
 import { 
   CheckCircle, 
   AlertTriangle, 
   Info, 
   Shield, 
-  ArrowRight, 
-  Download
+  Download, 
+  ClipboardList
 } from "lucide-react";
 
 // Components UI
@@ -20,7 +19,8 @@ const PaymentResult = ({
   paymentData, 
   onGoHome, 
   onRetry,
-  onViewTickets 
+  onViewTickets,
+  goToTransactionHistory 
 }) => {
   // Renderizar conteúdo com base no status
   const renderContent = () => {
@@ -83,6 +83,17 @@ const PaymentResult = ({
               Ver Meus Ingressos
             </Button>
           )}
+
+          {goToTransactionHistory && (
+            <Button
+              variant="outline"
+              onClick={goToTransactionHistory}
+              className="w-full py-3"
+            >
+              <ClipboardList size={16} className="mr-2" />
+              Ver Histórico de Compras
+            </Button>
+          )}
         </div>
       </>
     );
@@ -123,12 +134,24 @@ const PaymentResult = ({
           >
             Voltar para a Página Inicial
           </Button>
+          
           <Button
             variant="outline"
             className="w-full py-3"
           >
             Verificar Status do Pagamento
           </Button>
+          
+          {goToTransactionHistory && (
+            <Button
+              variant="outline"
+              onClick={goToTransactionHistory}
+              className="w-full py-3"
+            >
+              <ClipboardList size={16} className="mr-2" />
+              Ver Histórico de Compras
+            </Button>
+          )}
         </div>
       </>
     );
@@ -170,6 +193,7 @@ const PaymentResult = ({
           >
             Tentar Novamente
           </Button>
+          
           <Button
             variant="outline"
             onClick={onGoHome}
@@ -177,6 +201,17 @@ const PaymentResult = ({
           >
             Voltar para a Página Inicial
           </Button>
+          
+          {goToTransactionHistory && (
+            <Button
+              variant="outline"
+              onClick={goToTransactionHistory}
+              className="w-full py-3"
+            >
+              <ClipboardList size={16} className="mr-2" />
+              Ver Histórico de Compras
+            </Button>
+          )}
         </div>
       </>
     );

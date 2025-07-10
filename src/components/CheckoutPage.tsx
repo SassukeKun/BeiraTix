@@ -1,41 +1,33 @@
-// pages/CheckoutPage.tsx
-import { useState, useEffect } from "react";
+// pages/CheckoutPage.jsx
+import React, { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 
 // Componentes
-import Header from "./Header";
-import Footer from "./Footer";
-import PaymentProcess from "./PaymentProcess";
-import PaymentResult from "./PaymentResult";
-import React from "react";
-
-// Tipos
-interface CheckoutPageProps {
-  eventId: number;
-  selectedTickets: any[];
-  goToEventDetails: (id: number) => void;
-  goToHome: () => void;
-}
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import PaymentProcess from "../components/PaymentProcess";
+import PaymentResult from "../components/PaymentResult";
 
 // Componente principal
 const CheckoutPage = ({ 
   eventId,
   selectedTickets,
   goToEventDetails,
-  goToHome
-}: CheckoutPageProps) => {
+  goToHome,
+  goToTransactionHistory
+}) => {
   // Estados
-  const [eventDetails, setEventDetails] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [paymentStep, setPaymentStep] = useState<'process' | 'result'>('process');
-  const [paymentResult, setPaymentResult] = useState<any>(null);
+  const [eventDetails, setEventDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [paymentStep, setPaymentStep] = useState('process');
+  const [paymentResult, setPaymentResult] = useState(null);
 
   // Simulação de carregamento dos detalhes do evento
   useEffect(() => {
     // Em uma aplicação real, buscaríamos os dados do backend
     // Aqui simulamos com um timeout
     const timer = setTimeout(() => {
-      // Dados mocados para o exemplo
+      // Dados mockados para o exemplo
       setEventDetails({
         id: eventId,
         title: "Festival de Jazz na Praia",
@@ -54,7 +46,7 @@ const CheckoutPage = ({
   }, [eventId]);
 
   // Função para lidar com a conclusão do pagamento
-  const handlePaymentComplete = (paymentData: any) => {
+  const handlePaymentComplete = (paymentData) => {
     setPaymentResult({
       ...paymentData,
       // Em uma aplicação real, o status viria do backend
@@ -75,6 +67,15 @@ const CheckoutPage = ({
     setPaymentStep('process');
   };
 
+  // Função para visualizar os ingressos
+  const handleViewTickets = () => {
+    // Em uma implementação real, aqui poderíamos abrir um modal
+    // ou navegar para uma página de visualização de ingressos
+    console.log("Visualizando ingressos...");
+    // Por enquanto, apenas mostramos um alerta
+    window.alert("Seus ingressos foram enviados para seu email!");
+  };
+
   // Renderizar o conteúdo principal
   const renderContent = () => {
     if (isLoading) {
@@ -85,7 +86,7 @@ const CheckoutPage = ({
       );
     }
 
-    if (paymentStep === 'process') {
+    if (paymentStep === 'process' && eventDetails) {
       return (
         <PaymentProcess
           selectedTickets={selectedTickets}
@@ -96,13 +97,15 @@ const CheckoutPage = ({
       );
     }
 
-    if (paymentStep === 'result') {
+    if (paymentStep === 'result' && paymentResult) {
       return (
         <PaymentResult
           status={paymentResult.status}
           paymentData={paymentResult}
           onGoHome={goToHome}
           onRetry={handleRetry}
+          onViewTickets={handleViewTickets}
+          goToTransactionHistory={goToTransactionHistory}
         />
       );
     }
@@ -113,7 +116,7 @@ const CheckoutPage = ({
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <Header />
+      <Header goToHome={goToHome} goToTransactionHistory={goToTransactionHistory} />
       
       {/* Breadcrumb e título */}
       <div className="bg-white border-b border-gray-200">

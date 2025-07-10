@@ -112,7 +112,7 @@ const eventDetailsMock = {
 };
 
 // Componente principal da página de detalhes do evento
-const EventDetails = ({ eventId, goToHome, goToEventDetails, goToCheckout }) => {
+const EventDetails = ({ eventId, goToHome, goToEventDetails, goToCheckout, goToTransactionHistory }) => {
   const [selectedTickets, setSelectedTickets] = useState({});
   const [expandedFAQs, setExpandedFAQs] = useState({});
   const [showAllDescription, setShowAllDescription] = useState(false);
@@ -162,7 +162,8 @@ const EventDetails = ({ eventId, goToHome, goToEventDetails, goToCheckout }) => 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <Header />
+      
+      <Header goToHome={goToHome} goToTransactionHistory={goToTransactionHistory} />
 
       {/* Breadcrumb e ações */}
       <div className="bg-white border-b">
